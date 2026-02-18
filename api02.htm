@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Call: User</title>
+    <!-- tailwind cdn -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- css -->
+    <link rel="stylesheet" href="./main.css">
+</head>
+
+<body>
+    <main id="userDetails" class="w-100 mx-auto bg-teal-700 rounded-3xl mt-15 p-7 flex flex-col justify-center items-center">
+
+    </main>
+</body>
+<script>
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", "https://dummyjson.com/users");
+    xhr.send();
+    xhr.onreadystatechange = () => {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            const allUsers = JSON.parse(xhr.responseText);
+            const userArray = allUsers.users;
+            // console.log(userArray);
+            const randomNum = Math.floor(Math.random() * userArray.length);
+            const randomUser = userArray[randomNum];
+            console.log(randomUser);
+
+            userDetails.innerHTML = `
+                <img class="rounded-full mx-auto" src="${randomUser.image}" alt="profileImg">
+                <h1>${randomUser.firstName} ${randomUser.maidenName} ${randomUser.lastName}</h1>
+                <h2>Age: ${randomUser.age}</h2>
+                <h2>Gender: ${randomUser.gender}</h2>
+                <h2>Email: ${randomUser.email}</h2>
+                <h3>Phone: ${randomUser.phone}</h3>
+                <h4>DOB: Date of Birth: ${randomUser.birthDate}</h4>
+                <h5 class="flex flex-col justify-center items-center">Address <p>${randomUser.address.address}, ${randomUser.address.city}</p><p>${randomUser.address.stateCode}, ${randomUser.address.state}, ${randomUser.address.country}</p><p>PIN: ${randomUser.address.postalCode}</p></h5>
+                <h5>University: ${randomUser.university}</h5>
+                <h5>Company: ${randomUser.company.name}</h5>
+                <h5>Department: ${randomUser.company.department}</h5>
+                <h5>Title: ${randomUser.company.title}</h5>
+            `
+        } else {
+            console.log("API Call Failed");
+        }
+    }
+
+</script>
+
+</html>

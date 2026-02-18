@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Call</title>
+    <!-- bootstrap cdn -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+</head>
+
+<body>
+    <main class="container">
+        <h1 class="text-center fw-bold my-5">TODO List</h1>
+        <table class="table table-striped-columns table-hover">
+            <thead class="table-dark">
+                <td>#</td>
+                <th>User ID</th>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Completed</th>
+            </thead>
+            <tbody id="tableBody">
+                
+            </tbody>
+        </table>
+    </main>
+</body>
+<script>
+    // create XHR object
+    const xhr = new XMLHttpRequest();
+    // Open / create the request 
+    xhr.open("GET", "https://jsonplaceholder.typicode.com/todos");
+    // Send the request
+    xhr.send();
+    // Track Request state: use 'readyState' property, It's value changes from 1 to 4. If readyState becomes 4, then the client recieves the response. Check its status is in 2xx series then client request becomes succesful. To get server response use 'responseText' of xhr
+    xhr.onreadystatechange = () => {
+        if(xhr.readyState == 4 && xhr.status == 200) {
+            const allTodos = JSON.parse(xhr.responseText);
+            console.log(allTodos);
+            allTodos.forEach((todo, index) => {
+                tableBody.innerHTML += `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td>${todo.userId}</td>
+                    <td>${todo.id}</td>
+                    <td>${todo.title}</td>
+                    <td>${todo.completed?`<button class="btn btn-success">Completed</button>`:`<button class="btn btn-danger">Pending</button>`}</td>
+                </tr>
+                `
+            });       
+        } else {
+            console.log("API Call Failed");            
+        }
+    }
+</script>
+</html>
