@@ -46,9 +46,9 @@
                 const currArray = currency.map(x => {
                     return `${data.currencies[x].symbol} ${data.currencies[x].name}`;
                 });
-                console.log(data, currArray);
+                console.log(data);
                 countryDetails.innerHTML = `
-                    <img class="w-full" src="${data.flags.png}" alt="flag">
+                    <img class="w-full" src="${data.flags.png}" alt="${data.flags.alt}">
                     <h3 class="border-t border-black/20 w-full p-1 font-semibold text-xl">${data.name.common}</h3>
                     <h4 class="border-t border-black/20 w-full p-1">Capital: ${data.capital.join(", ")}</h4>
                     <h4 class="border-t border-black/20 w-full p-1">Population: ${data.population}</h4>
@@ -61,7 +61,7 @@
             });
         }).catch(reason => {
             console.log(reason);
-            alert("Invalid Country input!");
+            alert("Error! Didn't receive a response from the api server!");
         });
     });    
 </script>
