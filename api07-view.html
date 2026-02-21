@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe: View Page</title>
+    <!-- bootstrap cdn link -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+</head>
+<body>
+    <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container px-4 px-lg-5">
+                <a class="navbar-brand" href="./index.html">Recipe Details</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="#!">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#!">About</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="#!">All Products</a></li>
+                                <li><hr class="dropdown-divider" /></li>
+                                <li><a class="dropdown-item" href="#!">Popular Items</a></li>
+                                <li><a class="dropdown-item" href="#!">New Arrivals</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <form class="d-flex">
+                        <button class="btn btn-outline-dark" type="submit">
+                            <i class="bi-cart-fill me-1"></i>
+                            Cart
+                            <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+        <!-- Product section-->
+        <section id="result" class="py-5">
+            
+        </section>         
+</body>
+<!-- bootstrap cdn script -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+    crossorigin="anonymous"></script>
+
+<script>
+    const id = JSON.parse(sessionStorage.getItem("id"));
+    console.log(id);
+
+    const viewRecipe = async () => {
+        const response = await fetch(`https://dummyjson.com/recipes/${id}`);
+        const recipeDetails = await response.json();
+        console.log(recipeDetails);
+        result.innerHTML = `
+        <div class="container px-4 px-lg-5 my-5">
+                <div class="row gx-4 gx-lg-5 align-items-center">
+                    <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0" src="${recipeDetails.image}" alt="..." /></div>
+                    <div class="col-md-6">
+                        <div class="small mb-1">Meal Type: ${recipeDetails.mealType}, Difficulty: ${recipeDetails.difficulty}</div>
+                        <h1 class="display-5 fw-bolder">${recipeDetails.name}</h1>
+                        <div class="fs-5 mb-5">
+                            <span class="">Rating: ${recipeDetails.rating}</span>
+                            <span>Cuisine: ${recipeDetails.cuisine}</span>
+                        </div>
+                        <p class="lead">${recipeDetails.ingredients}</p>
+                        <p class="lead">${recipeDetails.instructions}</p>
+                        <div class="d-flex">
+                            <input class="form-control text-center me-3" id="servingQuantity" type="text" value="${recipeDetails.servings}" style="max-width: 3rem" />
+                            <button class="btn btn-outline-dark flex-shrink-0" type="button">
+                                Calories: ${recipeDetails.caloriesPerServing}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;    
+    }
+
+    viewRecipe();
+    
+</script>    
+
+</html>
