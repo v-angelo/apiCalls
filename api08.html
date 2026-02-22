@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API: Carts</title>
+    <!-- tailwind cdn -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- css -->
+    <link rel="stylesheet" href="./main.css">
+</head>
+
+<body class="">
+    <header class="w-full bg-emerald-500 px-3 py-5">
+        <nav class="flex justify-between max-w-5xl text-3xl font-bold mx-auto">
+            <h3 class="cursor-pointer hover:opacity-80">E-Cart</h3>
+            <div class="flex justify-center gap-2 px-2">
+                <h3 class="cursor-pointer hover:opacity-80">🛒</h3>
+                <h3 class="cursor-pointer hover:opacity-80">☰</h3>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <!-- random button -->
+        <section class="w-full">
+            <button onclick="randomCart()"
+                class="bg-blue-600 text-lg font-semibold rounded cursor-pointer p-2 w-70 mt-5 mb-2 mx-auto block hover:ring-2 hover:ring-black active:bg-blue-500">Generate
+                Random User Cart</button>
+        </section>
+        <!-- cart items -->
+        <section class="w-full">
+            <table class="table-auto lg:table-fixed lg:w-5xl max-w-5xl mx-auto">
+                <caption id="tableCaption">
+                    
+                </caption>
+                <thead class="bg-emerald-500">
+                    <tr>
+                        <th class="p-3">Product</th>
+                        <th class="p-3">Quantity</th>
+                        <th class="p-3">Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody id="cartTableBody" class="text-center bg-slate-50">
+                    <!-- cart items come here -->
+                </tbody>
+            </table>
+        </section>
+        <section id="billAmount" class="max-w-5xl max-lg:max-w-135 max-sm:max-w-110 mx-auto flex justify-end">
+            <!-- total price here -->
+        </section>
+    </main>
+</body>
+<script>
+    // async function
+    const randomCart = async () => {
+        try {
+            const response = await fetch("https://dummyjson.com/carts");
+            const serverData = await response.json();
+            const allCarts = serverData.carts;
+            const randomCart = allCarts[Math.floor(Math.random() * allCarts.length)];
+            console.log(randomCart);
+
+            tableCaption.innerHTML = `
+                <div class="text-2xl font-bold text-black/80 flex justify-between p-2"><span>ID: ${randomCart.id}</span><span>User ID: # ${randomCart.userId}</span></div>
+            `;
+
+            cartTableBody.innerHTML = "";
+            randomCart.products.forEach(product => {
+                cartTableBody.innerHTML += `
+                    <tr class="border-t border-t-black/15">
+                        <td class="p-3 flex flex-col sm:flex-row justify-baseline items-center">
+                            <img class="w-25 h-25 rounded border border-black/15" src="${product.thumbnail}" alt="productImg">
+                            <div class="p-2 text-start">
+                                <h4 class="text-lg font-semibold text-black/70">#${product.id}</h4>
+                                <h4 class="text-lg font-semibold">${product.title}</h4>
+                                <h4 class="font-semibold text-black/70">Price: ${product.price}</h4>
+                            </div>
+                        </td>
+                        <td><span
+                                class="p-1 text-sm border border-black/10 rounded mx-1 bg-slate-50 cursor-pointer">➖</span><span
+                                class="text-lg font-semibold">${product.quantity}</span><span
+                                class="p-1 text-sm border border-black/10 rounded mx-1 bg-slate-100 cursor-pointer">➕</span>
+                        </td>
+                        <td class="font-semibold">
+                            <h4 class="text-black/70">Total: $${product.total.toFixed(2)}</h4>
+                            <h4 class="text-black/70">Disount: ${product.discountPercentage}%</h4>
+                            <h3 class="text-xl">Discounted Total:</h3>
+                            <h3 class="text-xl">$${product.discountedTotal}</h3>
+                        </td>
+                    </tr>
+                `;                                
+            });
+
+            billAmount.innerHTML = `
+                <div class="w-100 max-w-5xl text-xl font-semibold p-3">
+                    <hr class="border-3 border-emerald-700/70 rounded-full">
+                    <h3 class="my-4 flex justify-between"><span>Total Products</span> <span>${randomCart.totalProducts}</span></h3>
+                    <h3 class="my-4 flex justify-between"><span>Total Quantity</span> <span>${randomCart.totalQuantity}</span></h3>
+                    <h3 class="my-4 flex justify-between"><span>Total Price</span> <span>$${randomCart.total}</span></h3>
+                    <h2 class="my-4 flex justify-between text-2xl font-bold"><span>Discounted Price</span> <span>$${randomCart.discountedTotal}</span>
+                    </h2>
+                    <div class="flex justify-end">
+                        <button
+                            class="bg-blue-600 text-lg font-semibold rounded cursor-pointer p-2 w-60 my-3 block hover:ring-2 hover:ring-black active:bg-blue-500">Proceed
+                            to Checkout →</button>
+                    </div>
+                </div>
+                `;
+
+        } catch (error) {
+            console.log("API Call Failed!");
+
+        }
+    }
+</script>
+
+</html>
